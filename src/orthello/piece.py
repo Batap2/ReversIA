@@ -1,4 +1,4 @@
-from .variable import SQUARE_SIZE
+from .variable import SQUARE_SIZE, WHITE, BLACK
 import pygame
 
 
@@ -6,7 +6,7 @@ class Piece:
     PADDING = 10
     BORDER = 2
 
-    def __init__(self, row, col, color):
+    def __init__(self, row: int, col: int, color: bool):
         self.row = row
         self.col = col
         self.color = color
@@ -20,7 +20,7 @@ class Piece:
 
     def draw(self, win):
         radius = SQUARE_SIZE // 2 - self.PADDING
-        pygame.draw.circle(win, self.color, (self.x, self.y), radius)
+        pygame.draw.circle(win, WHITE if self.color else BLACK, (self.x, self.y), radius)
 
     def __repr__(self):
         return str(self.color)
