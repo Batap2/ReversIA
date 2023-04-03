@@ -12,7 +12,9 @@ def main():
     run = True
     clock = pygame.time.Clock()
     board = Board()
-    board.create_board()
+
+    board.draw(WIN)
+    pygame.display.update()
 
     while (run):
         clock.tick(FPS)
@@ -23,10 +25,13 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 board.place_piece(mouse_pos)
-                pass
 
-        board.draw(WIN)
-        pygame.display.update()
+                board.draw(WIN)
+                pygame.display.update()
+
+                if board.isGameFinished():
+                    print("Partie Terminée")
+                pass
 
     pygame.quit()
 
