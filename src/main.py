@@ -1,6 +1,7 @@
 import pygame
 from orthello.variable import WIDTH, HEIGHT, SQUARE_SIZE
 from orthello.board import Board
+from minimax import *
 
 FPS = 60
 
@@ -24,7 +25,13 @@ def main():
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
-                board.place_piece(mouse_pos)
+                board.mouse_place_piece(mouse_pos)
+
+                board.draw(WIN)
+                pygame.display.update()
+
+                if board.currentPlayer == False:
+                    board.applyMove(getMoveMinimax(Node(board), 2, True, False)[1], False)
 
                 board.draw(WIN)
                 pygame.display.update()

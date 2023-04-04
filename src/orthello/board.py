@@ -42,18 +42,27 @@ class Board:
         self.setPiece(False, center, center - 1)
         self.setPiece(True, center - 1, center - 1)
 
-    def place_piece(self, pos):
-        x = pos[0] // SQUARE_SIZE
-        y = pos[1] // SQUARE_SIZE
+    # Fonction qui pose un pion et applique les conséquences. Retourn True si le move a pu être appliqué, puis change le joueur
+    def applyMove(self, pos, player:bool) -> bool:
+        x = pos % SIZE
+        y = pos // SIZE
 
-        if self.getPiece(x, y) == 0:  # Si la case est vide
+        if self.getPiece(pos) == 0:  # Si la case est vide
             if self.isValid(x, y, self.currentPlayer):
                 self.setPiece(self.currentPlayer, x, y)  # On joue sur cette case
-                # Changement du joueur courant si le mouve a été joué
+                # Changement du joueur courant si le move a été joué
                 if self.currentPlayer == True:
                     self.currentPlayer = False
                 else:
                     self.currentPlayer = True
+                return True
+        return False
+
+    def mouse_place_piece(self, pos):
+        x = pos[0] // SQUARE_SIZE
+        y = pos[1] // SQUARE_SIZE
+
+        self.applyMove(SIZE*y + x, self.currentPlayer)
 
     def isValid(self, x, y, player: bool):  # Verifie si la pièce jouée est bien valide
         res = False
@@ -105,6 +114,8 @@ class Board:
         return neighbours
 
     # Retourne les coup jouable pour player
+    # TODO : A remplacer si ya des problèmes de perf, au début c'est bien mais vers le milieu du jeu c'est plus opti
+    # TODO : Ouais faut faire une condition si il y a X pion présent parce que c'est infernal
     def getPossiblePlay(self, player: bool) -> [int]:
         plays = []
         for piece in self.board:
