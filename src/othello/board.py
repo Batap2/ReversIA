@@ -6,6 +6,7 @@ class Board:
     def __init__(self):
         self.board = []
         self.create_board()
+        # TODO : inverser sens car c'est le noir qui commence. Faut pas juste passer currentPlayer a False, faut faire ce qui va avec, si tu sais pas ce qui va avec fait pas
         self.currentPlayer = True  # True = White, False = Black
         self.playable_cell = []
 
@@ -64,6 +65,7 @@ class Board:
         self.applyMove(SIZE*y + x, self.currentPlayer)
 
     def isValid(self, x, y, player: bool):  # Verifie si la pièce jouée est bien valide
+        # TODO : remplacer par get8NeighbourPos. Parce que c'est comme ça que ça marche et pas juste les 4
         neighbours = self.get4NeighbourPos(x, y)
 
         # condition 1 : La case doit être vide
@@ -81,7 +83,7 @@ class Board:
             return False
 
         # condition 3 : Le pion placé doit permettre le retournement d'au moins un pion adverse
-        #for e in range(x+1, 8):
+        # TODO : checker les 8 directions, faut pas qu'il y ai de trous
 
         return True
 
@@ -97,7 +99,7 @@ class Board:
             neighbours.append((x, y + 1))  # Voisin de droite
         return neighbours
 
-    #TODO : faire
+    #TODO : faire ça
     def get8NeighbourPos(self, x, y):  # Recupère le 4-voisinage d'une case
         neighbours = []
         if x > 0:
