@@ -1,5 +1,4 @@
-import pygame
-from .variable import *
+from src.variable import *
 from .piece import Piece
 
 
@@ -65,24 +64,41 @@ class Board:
         self.applyMove(SIZE*y + x, self.currentPlayer)
 
     def isValid(self, x, y, player: bool):  # Verifie si la pièce jouée est bien valide
-        res = False
-        neighbours = self.getNeighbourPos(x, y)
+        neighbours = self.get4NeighbourPos(x, y)
 
         # condition 1 : La case doit être vide
         if self.getPiece(x, y) != 0:
             return False
 
         # condition 2 : La case doit être adjacente à un pion du joueur
+        check = False
         for n in neighbours:
             if self.getPiece(n[0], n[1]) != 0:
                 if self.getPiece(n[0], n[1]).color != player:
-                    res = True
+                    check = True
+                    break
+        if not check:
+            return False
 
         # condition 3 : Le pion placé doit permettre le retournement d'au moins un pion adverse
-        # TODO : rajouter la condition qui dit qu'il faut que ça retourne au moins une piece adverse
-        return res
+        #for e in range(x+1, 8):
 
-    def getNeighbourPos(self, x, y):  # Recupère le 4-voisinage d'une case
+        return True
+
+    def get4NeighbourPos(self, x, y):  # Recupère le 4-voisinage d'une case
+        neighbours = []
+        if x > 0:
+            neighbours.append((x - 1, y))  # Voisin du haut
+        if x < SIZE - 1:
+            neighbours.append((x + 1, y))  # Voisin du bas
+        if y > 0:
+            neighbours.append((x, y - 1))  # Voisin de gauche
+        if y < SIZE - 1:
+            neighbours.append((x, y + 1))  # Voisin de droite
+        return neighbours
+
+    #TODO : faire
+    def get8NeighbourPos(self, x, y):  # Recupère le 4-voisinage d'une case
         neighbours = []
         if x > 0:
             neighbours.append((x - 1, y))  # Voisin du haut

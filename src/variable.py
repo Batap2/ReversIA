@@ -10,3 +10,6 @@ COLOR = (35, 180, 35)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GREY = (125, 125, 125)
+
+# 0 = count
+HEURISTIC_MODE = 0

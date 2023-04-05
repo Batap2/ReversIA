@@ -1,4 +1,4 @@
-from .variable import SQUARE_SIZE, WHITE, BLACK, SIZE
+from src.variable import SQUARE_SIZE, WHITE, BLACK, SIZE
 import pygame
 
 

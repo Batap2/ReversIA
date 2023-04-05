@@ -1,7 +1,7 @@
 import pygame
-from orthello.variable import WIDTH, HEIGHT, SQUARE_SIZE
-from orthello.board import Board
-from minimax import *
+from src.variable import WIDTH, HEIGHT
+from othello.board import Board
+from othello_minimax import *
 
 FPS = 60
 
@@ -10,6 +10,7 @@ pygame.display.set_caption("Orthello")
 
 
 def main():
+    global Nb_exploration
     run = True
     clock = pygame.time.Clock()
     board = Board()
@@ -31,7 +32,11 @@ def main():
                 pygame.display.update()
 
                 if board.currentPlayer == False:
-                    board.applyMove(getMoveMinimax(Node(board), 2, True, False)[1], False)
+                #    board.applyMove(minimax(Node(board), 4, True, False)[1], False)
+                    board.applyMove(alpha_beta_minimax(Node(board), 4, float("-inf"), float("inf"), True, False)[1], False)
+
+                print(Nb_exploration)
+                Nb_exploration[0] = 0
 
                 board.draw(WIN)
                 pygame.display.update()
