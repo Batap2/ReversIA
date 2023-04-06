@@ -1,4 +1,4 @@
-from src.variable import *
+from variable import *
 from .piece import Piece
 
 
@@ -50,6 +50,7 @@ class Board:
         if self.getPiece(pos) == 0:  # Si la case est vide
             if self.isValid(x, y, self.currentPlayer):
                 self.setPiece(self.currentPlayer, x, y)  # On joue sur cette case
+                self.compute_outflanking(x,y, self.currentPlayer)
                 # Changement du joueur courant si le move a été joué
                 if self.currentPlayer == True:
                     self.currentPlayer = False
@@ -64,26 +65,50 @@ class Board:
 
         self.applyMove(SIZE*y + x, self.currentPlayer)
 
+# Change la couleur des pions pris en sandwich par le pion placé 
+    def compute_outflanking(self, x,y, player: bool):
+        neighbours = self.get8NeighbourPos(x, y)
+        for n in neighbours:
+            if self.getPiece(n[0], n[1]) != 0:
+                if self.getPiece(n[0], n[1]).color != player:   
+                    direction = (n[0] - x, n[1] - y) # direction dans laquelle doit se faire le sandwich
+                    if 0 <= n[0] + direction[0] <= SIZE-1 and 0 <=  n[1] + direction[1] <= SIZE-1:
+                        if self.getPiece(n[0] + direction[0], n[1] + direction[1]) != 0:
+                            if self.getPiece(n[0] + direction[0], n[1] + direction[1]).color == player:
+                                self.getPiece(n[0], n[1]).color = player
+
+
     def isValid(self, x, y, player: bool):  # Verifie si la pièce jouée est bien valide
-        # TODO : remplacer par get8NeighbourPos. Parce que c'est comme ça que ça marche et pas juste les 4
-        neighbours = self.get4NeighbourPos(x, y)
+        neighbours = self.get8NeighbourPos(x, y)
 
         # condition 1 : La case doit être vide
         if self.getPiece(x, y) != 0:
             return False
 
-        # condition 2 : La case doit être adjacente à un pion du joueur
+        # condition 2 : La case doit être adjacente à un pion du joueur adverse
         check = False
+        adjacent = [] # listes des pions adverses adjacents pour condition 3
         for n in neighbours:
             if self.getPiece(n[0], n[1]) != 0:
                 if self.getPiece(n[0], n[1]).color != player:
+                    adjacent.append((n[0], n[1]))
                     check = True
                     break
         if not check:
             return False
 
         # condition 3 : Le pion placé doit permettre le retournement d'au moins un pion adverse
-        # TODO : checker les 8 directions, faut pas qu'il y ai de trous
+        # i.e. le placement permet de prendre en sandwich un pion adverse. 
+        check = False
+        for p in adjacent:
+            direction = (p[0] - x, p[1] - y) # direction dans laquelle doit se faire le sandwich
+            if 0 <= p[0] + direction[0] <= SIZE-1 and 0 <=  p[1] + direction[1] <= SIZE-1:
+                if self.getPiece(p[0] + direction[0], p[1] + direction[1]) != 0:
+                    if self.getPiece(p[0] + direction[0], p[1] + direction[1]).color == player:
+                        check = True
+                        break
+        if not check:
+            return False
 
         return True
 
@@ -99,36 +124,29 @@ class Board:
             neighbours.append((x, y + 1))  # Voisin de droite
         return neighbours
 
-    #TODO : faire ça
-    def get8NeighbourPos(self, x, y):  # Recupère le 4-voisinage d'une case
+    def get8NeighbourPos(self, x, y):  # Recupère le 8-voisinage d'une case
         neighbours = []
-        if x > 0:
-            neighbours.append((x - 1, y))  # Voisin du haut
-        if x < SIZE - 1:
-            neighbours.append((x + 1, y))  # Voisin du bas
-        if y > 0:
-            neighbours.append((x, y - 1))  # Voisin de gauche
-        if y < SIZE - 1:
-            neighbours.append((x, y + 1))  # Voisin de droite
+        for i in x-1, x, x+1:
+            for j in y-1, y, y+1:
+                if i == x and j == y:
+                    continue
+                if not ((0 <= i <= SIZE-1) and (0 <= j <= SIZE-1)):
+                    continue
+                neighbours.append((i,j))
         return neighbours
 
     def getValidNeighbourPos(self, pos, player: bool) -> [int]:
         neighbours = []
         x = pos % SIZE
         y = pos // SIZE
-
-        if x > 0 and self.isValid(x - 1, y, player):
-            neighbours.append(pos - 1)  # Voisin du haut
-
-        if x < SIZE - 1 and self.isValid(x + 1, y, player):
-            neighbours.append(pos + 1)  # Voisin du bas
-
-        if y > 0 and self.isValid(x, y - 1, player):
-            neighbours.append(pos - SIZE)  # Voisin de gauche
-
-        if y < SIZE - 1 and self.isValid(x, y + 1, player):
-            neighbours.append(pos + SIZE)  # Voisin de droite
-
+        for i in x-1, x, x+1:
+            for j in y-1, y, y+1:
+                if i == x and j == y:
+                    continue
+                if not ((0 <= i <= SIZE-1) and (0 <= j <= SIZE-1)):
+                    continue
+                if self.isValid(i,j,player):
+                    neighbours.append(i + SIZE * j)
         return neighbours
 
     # Retourne les coup jouable pour player

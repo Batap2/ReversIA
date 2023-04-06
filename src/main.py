@@ -1,5 +1,5 @@
 import pygame
-from src.variable import WIDTH, HEIGHT
+from variable import WIDTH, HEIGHT
 from othello.board import Board
 from othello_minimax import *
 

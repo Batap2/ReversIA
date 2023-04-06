@@ -1,5 +1,5 @@
 import copy
-from src.variable import HEURISTIC_MODE
+from variable import HEURISTIC_MODE
 
 Nb_exploration = [0]
 
