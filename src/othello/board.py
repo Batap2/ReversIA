@@ -87,18 +87,21 @@ class Board:
 
         # condition 2 : La case doit être adjacente à un pion du joueur adverse
         check = False
-        adjacent = [] # listes des pions adverses adjacents pour condition 3
         for n in neighbours:
             if self.getPiece(n[0], n[1]) != 0:
                 if self.getPiece(n[0], n[1]).color != player:
-                    adjacent.append((n[0], n[1]))
                     check = True
                     break
         if not check:
             return False
 
         # condition 3 : Le pion placé doit permettre le retournement d'au moins un pion adverse
-        # i.e. le placement permet de prendre en sandwich un pion adverse. 
+        # i.e. le placement permet de prendre en sandwich un pion adverse.
+        adjacent = [] # listes des pions adverses adjacents 
+        for n in neighbours:
+            if self.getPiece(n[0], n[1]) != 0:
+                if self.getPiece(n[0], n[1]).color != player:
+                    adjacent.append((n[0], n[1])) 
         check = False
         for p in adjacent:
             direction = (p[0] - x, p[1] - y) # direction dans laquelle doit se faire le sandwich
