@@ -52,12 +52,12 @@ class Board:
                 self.setPiece(self.currentPlayer, x, y)  # On joue sur cette case
                 self.compute_outflanking(x,y, self.currentPlayer)
                 # Changement du joueur courant si le move a été joué
-                if self.currentPlayer == True:
-                    self.currentPlayer = False
-                else:
-                    self.currentPlayer = True
+                self.switch_player()
                 return True
         return False
+
+    def switch_player(self):
+        self.currentPlayer = not self.currentPlayer
 
     def mouse_place_piece(self, pos):
         x = pos[0] // SQUARE_SIZE
