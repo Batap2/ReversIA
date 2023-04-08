@@ -15,6 +15,7 @@ class AI:
 FPS = 60
 
 # Noir, Blanc, False = joueur, sinon AI()
+
 Players = [False, AI(True, 0)]
 
 EasyAI = AI(True, 0, 1)

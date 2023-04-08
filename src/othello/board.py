@@ -50,14 +50,16 @@ class Board:
         if self.getPiece(pos) == 0:  # Si la case est vide
             if self.isValid(x, y, self.currentPlayer):
                 self.setPiece(self.currentPlayer, x, y)  # On joue sur cette case
-                self.compute_outflanking(x, y, self.currentPlayer)
+                flipped = self.compute_outflanking(x, y, self.currentPlayer)
+                for p in flipped:
+                    self.getPiece(p[0], p[1]).color = self.currentPlayer
                 # Changement du joueur courant si le move a été joué
-                if self.currentPlayer == True:
-                    self.currentPlayer = False
-                else:
-                    self.currentPlayer = True
+                self.switch_player()
                 return True
         return False
+
+    def switch_player(self):
+        self.currentPlayer = not self.currentPlayer
 
     def mouse_place_piece(self, pos):
         x = pos[0] // SQUARE_SIZE
@@ -68,14 +70,30 @@ class Board:
     # Change la couleur des pions pris en sandwich par le pion placé
     def compute_outflanking(self, x, y, player: bool):
         neighbours = self.get8NeighbourPos(x, y)
+        sandwich = []
         for n in neighbours:
+            candidate = []
             if self.getPiece(n[0], n[1]) != 0:
                 if self.getPiece(n[0], n[1]).color != player:
                     direction = (n[0] - x, n[1] - y)  # direction dans laquelle doit se faire le sandwich
-                    if 0 <= n[0] + direction[0] <= SIZE - 1 and 0 <= n[1] + direction[1] <= SIZE - 1:
-                        if self.getPiece(n[0] + direction[0], n[1] + direction[1]) != 0:
-                            if self.getPiece(n[0] + direction[0], n[1] + direction[1]).color == player:
-                                self.getPiece(n[0], n[1]).color = player
+                    currentX = n[0]
+                    currentY = n[1]
+                    valid = False
+                    while(
+                            (0 <= currentX <= SIZE - 1 and 0 <= currentY <= SIZE - 1) and
+                            self.getPiece(currentX, currentY) != 0
+                        ):
+                        if self.getPiece(currentX, currentY).color != player:
+                            candidate.append((currentX, currentY))
+                            currentX += direction[0]
+                            currentY += direction[1]
+                        else: 
+                            valid = True
+                            break
+                    if valid:
+                        sandwich.extend(candidate)
+
+        return sandwich
 
     def isValid(self, x, y, player: bool):  # Verifie si la pièce jouée est bien valide
         neighbours = self.get8NeighbourPos(x, y)
@@ -96,23 +114,9 @@ class Board:
 
         # condition 3 : Le pion placé doit permettre le retournement d'au moins un pion adverse
         # i.e. le placement permet de prendre en sandwich un pion adverse.
-        adjacent = []  # listes des pions adverses adjacents
-        for n in neighbours:
-            if self.getPiece(n[0], n[1]) != 0:
-                if self.getPiece(n[0], n[1]).color != player:
-                    adjacent.append((n[0], n[1]))
-        check = False
-        for p in adjacent:
-            direction = (p[0] - x, p[1] - y)  # direction dans laquelle doit se faire le sandwich
-            if 0 <= p[0] + direction[0] <= SIZE - 1 and 0 <= p[1] + direction[1] <= SIZE - 1:
-                if self.getPiece(p[0] + direction[0], p[1] + direction[1]) != 0:
-                    if self.getPiece(p[0] + direction[0], p[1] + direction[1]).color == player:
-                        check = True
-                        break
-        if not check:
-            return False
+        sandwich = self.compute_outflanking(x,y,player)
 
-        return True
+        return len(sandwich) != 0
 
     def get8NeighbourPos(self, x, y):  # Recupère le 8-voisinage d'une case
         neighbours = []

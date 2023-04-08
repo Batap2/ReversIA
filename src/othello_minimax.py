@@ -95,13 +95,51 @@ class Node:
         else:
             cornerHeuristicValue = 0
 
-        # if res[indexMaxWeightValue] + res[indexMinWeightValue] != 0:
-        #     weightParity = 100 * (res[indexMaxWeightValue] - res[indexMinWeightValue]) / (res[indexMaxWeightValue] + res[indexMinWeightValue])
-        # else:
-        #     weightParity = 0
-        weightParity = res[indexMaxWeightValue] - res[indexMinWeightValue]
+        return coinParityHeuristicValue + mobilityHeuristicValue + cornerHeuristicValue
 
-        return coinParityHeuristicValue + weightParity + cornerHeuristicValue
+    def computeHeuristic3(self, color: bool):
+        res = self.countPawnCornersWeightMap()
+
+        # index pour retrouver les corners dans res
+        if color:
+            indexMaxPawn = 3
+            indexMaxCorner = 4
+            indexMaxWeightValue = 5
+            indexMinPawn = 0
+            indexMinCorner = 1
+            indexMinWeightValue = 2
+        else:
+            indexMaxPawn = 0
+            indexMaxCorner = 1
+            indexMaxWeightValue = 2
+            indexMinPawn = 3
+            indexMinCorner = 4
+            indexMinWeightValue = 5
+
+        coinParityHeuristicValue = 100 * (res[indexMaxPawn] - res[indexMinPawn]) / (
+                    res[indexMaxPawn] + res[indexMinPawn])
+
+        maxPlayerMoves = len(self.board.getPossiblePlay(color))
+        minPlayerMoves = len(self.board.getPossiblePlay(not color))
+
+        if maxPlayerMoves + minPlayerMoves != 0:
+            mobilityHeuristicValue = 100 * (maxPlayerMoves - minPlayerMoves) / (maxPlayerMoves + minPlayerMoves)
+        else:
+            mobilityHeuristicValue = 0
+
+        if res[indexMaxCorner] + res[indexMinCorner] != 0:
+            cornerHeuristicValue = 100 * (res[indexMaxCorner] - res[indexMinCorner]) / (
+                        res[indexMaxCorner] + res[indexMinCorner])
+        else:
+            cornerHeuristicValue = 0
+
+        if res[indexMaxWeightValue] + res[indexMinWeightValue] != 0:
+            weightParity = 100 * (res[indexMaxWeightValue] - res[indexMinWeightValue]) / (res[indexMaxWeightValue] + res[indexMinWeightValue])
+        else:
+            weightParity = 0
+        #weightParity = res[indexMaxWeightValue] - res[indexMinWeightValue]
+
+        return coinParityHeuristicValue + mobilityHeuristicValue + cornerHeuristicValue + weightParity
 
     def isLeaf(self) -> bool:
         return self.board.isGameFinished()
@@ -161,6 +199,8 @@ def alpha_beta_minimax(node,
             return node.computeHeuristic_cout(maximizingPlayer), None
         elif heuristic == 1:
             return node.computeHeuristic2(maximizingPlayer), None
+        elif heuristic == 2:
+            return node.computeHeuristic3(maximizingPlayer), None
 
     # print("------------- death: "+ str(depth) +"---------------")
 
