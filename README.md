@@ -1,2 +1,2 @@
-# Croatello
+# Le Othello aka l'Reversi
  
