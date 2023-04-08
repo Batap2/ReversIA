@@ -14,7 +14,7 @@ class AI:
 FPS = 60
 
 # Noir, Blanc, False = joueur, sinon AI()
-Players = [False, AI(True, 0)]
+Players = [AI(False, 1, 3), AI(True, 2, 3)]
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 pygame.display.set_caption("Le Othello aka L'Reversi")
