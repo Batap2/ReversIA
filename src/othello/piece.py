@@ -1,4 +1,4 @@
-from variable import SQUARE_SIZE, WHITE, BLACK, SIZE
+from .board_variable import SQUARE_SIZE, WHITE, BLACK, SIZE
 import pygame
 
 
