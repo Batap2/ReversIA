@@ -20,17 +20,17 @@ def drawEndBar(win, mousePos, winner):
     font = pygame.font.Font(None, 50)
 
     if winner == 2:
-        text = font.render("Égalité", True, BLACK)
+        text = font.render("Draw", True, BLACK)
         win.blit(text, (WIDTH / 2, 20))
     else:
-        text = font.render("Victoire des ", True, BLACK)
-        colorTxt = font.render("blancs" if bool(winner) else "noirs", True, WHITEPAWN if bool(winner) else BLACKPAWN)
+        text = font.render("win", True, BLACK)
+        colorTxt = font.render("White" if bool(winner) else "Black", True, WHITEPAWN if bool(winner) else BLACKPAWN)
 
-        win.blit(text, (250, 20))
-        win.blit(colorTxt, (460, 20))
+        win.blit(text, (420, 20))
+        win.blit(colorTxt, (310, 20))
 
-    retry_Button = Button(300, 150, "Recommencer", None, 50, WHITE, BLACK)
-    quit_Button = Button(550, 150, "Quitter", None, 50, WHITE, BLACK)
+    retry_Button = Button(300, 150, "Retry", None, 50, WHITE, BLACK)
+    quit_Button = Button(500, 150, "Quit", None, 50, WHITE, BLACK)
 
     retry_Button.draw(win, mousePos)
     quit_Button.draw(win, mousePos)
