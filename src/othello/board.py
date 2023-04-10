@@ -1,6 +1,11 @@
 from .board_variable import *
 from .piece import Piece
 
+import sys
+sys.path.append('../main_variable.py')
+from src.main_variable import BOARD_Y_OFFSET, BARCOLOR2
+
+
 
 class Board:
     def __init__(self):
@@ -11,13 +16,10 @@ class Board:
         self.playable_cell = []
 
     def draw_lines(self, win):
-        win.fill(COLOR)
         for horizontal in range(SIZE):
-            pygame.draw.line(win, BLACK, (0, horizontal * SQUARE_SIZE),
-                             (WIDTH, horizontal * SQUARE_SIZE), 2)
+            pygame.draw.line(win, BARCOLOR2, (0, horizontal * SQUARE_SIZE + BOARD_Y_OFFSET), (WIDTH, horizontal * SQUARE_SIZE + BOARD_Y_OFFSET), 2)
         for vertical in range(SIZE):
-            pygame.draw.line(win, BLACK, ((vertical + 1) * SQUARE_SIZE, 0),
-                             ((vertical + 1) * SQUARE_SIZE, HEIGHT), 2)
+            pygame.draw.line(win, BARCOLOR2, ((vertical + 1) * SQUARE_SIZE, BOARD_Y_OFFSET), ((vertical + 1) * SQUARE_SIZE, HEIGHT + BOARD_Y_OFFSET), 2)
 
     # python oblige, si y n'est pas donné, int x = pos
     def setPiece(self, color: bool, x, y=None):
@@ -61,11 +63,11 @@ class Board:
     def switch_player(self):
         self.currentPlayer = not self.currentPlayer
 
-    def mouse_place_piece(self, pos):
+    def mouse_place_piece(self, pos) -> bool:
         x = pos[0] // SQUARE_SIZE
-        y = pos[1] // SQUARE_SIZE
+        y = (pos[1] - BOARD_Y_OFFSET )// SQUARE_SIZE
 
-        self.applyMove(SIZE * y + x, self.currentPlayer)
+        return self.applyMove(SIZE * y + x, self.currentPlayer)
 
     # Change la couleur des pions pris en sandwich par le pion placé
     def compute_outflanking(self, x, y, player: bool):
@@ -194,11 +196,13 @@ class Board:
         # Calculer la position x de la case
         x = x * 100
         # Calculer la position y de la case
-        y = y * 100
+        y = y * 100 + BOARD_Y_OFFSET
         pygame.draw.line(win, GREY, (x + 30, y + 30), (x + 70, y + 70), 5)
         pygame.draw.line(win, GREY, (x + 70, y + 30), (x + 30, y + 70), 5)
 
     def draw(self, win):  # Dessine le quadrillage, les pieces jouées et les croix ou on peut jouer
+        pygame.draw.rect(win, BOARDGREEN, (0, 200, 800, 1000))
+
         self.draw_lines(win)
 
         for square in range(SIZE * SIZE):

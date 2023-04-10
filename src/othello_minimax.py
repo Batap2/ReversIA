@@ -1,5 +1,4 @@
 import copy
-from main_variable import HEURISTIC_MODE
 from othello.board_variable import *
 
 Nb_exploration = [0]
@@ -202,8 +201,6 @@ def alpha_beta_minimax(node,
         elif heuristic == 2:
             return node.computeHeuristic3(maximizingPlayer), None
 
-    # print("------------- death: "+ str(depth) +"---------------")
-
     returnMove = None
 
     if current_player:
@@ -215,11 +212,7 @@ def alpha_beta_minimax(node,
             newBoard = copy.deepcopy(node.board)
             newBoard.applyMove(move, current_player)
 
-            # print("si IA joue: " + str(move))
-
             result = alpha_beta_minimax(Node(newBoard), depth - 1, alpha, beta, False, maximizingPlayer, heuristic)
-
-            # print("max: " + str(result) + " move: " + str(move))
 
             # pour pas que ça renvoie un move null
             if returnMove == None:
@@ -243,11 +236,7 @@ def alpha_beta_minimax(node,
             newBoard = copy.deepcopy(node.board)
             newBoard.applyMove(move, current_player)
 
-            # print("si joueur joue: " + str(move))
-
             result = alpha_beta_minimax(Node(newBoard), depth - 1, alpha, beta, True, maximizingPlayer, heuristic)
-
-            # print("min: " + str(result) + " move: " + str(move))
 
             # pour pas que ça renvoie un move null
             if returnMove == None:
@@ -262,5 +251,4 @@ def alpha_beta_minimax(node,
                 break
             beta = min(beta, value)
 
-    # print("\ndepth: " + str(depth) + " return: " + str(value) + " " + str(returnMove))
     return value, returnMove

@@ -1,8 +1,9 @@
-import pygame
-from othello.board_variable import WIDTH, HEIGHT
+import time
 from othello.board import Board
 from othello_minimax import *
-from othello.menu import *
+from src.menu import *
+from main_variable import *
+import display
 
 
 class AI:
@@ -12,19 +13,50 @@ class AI:
         self.depth = depth
 
 
+def drawEndBar(win, mousePos, winner):
+    pygame.draw.rect(win, BARCOLOR2, (0, 0, 800, 200))
+
+    font = pygame.font.Font(None, 50)
+
+    if winner == 2:
+        text = font.render("Égalité", True, BLACK)
+        win.blit(text, (WIDTH / 2, 20))
+    else:
+        text = font.render("Victoire des ", True, BLACK)
+        colorTxt = font.render("blancs" if bool(winner) else "noirs", True, WHITEPAWN if bool(winner) else BLACKPAWN)
+
+        win.blit(text, (250, 20))
+        win.blit(colorTxt, (460, 20))
+
+    retry_Button = Button(300, 150, "Recommencer", None, 50, WHITE, BLACK)
+    quit_Button = Button(550, 150, "Quitter", None, 50, WHITE, BLACK)
+
+    retry_Button.draw(win, mousePos)
+    quit_Button.draw(win, mousePos)
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if quit_Button.is_hovered:
+                pygame.quit()
+            if retry_Button.is_hovered:
+                main()
+
+
 FPS = 60
 
 # Noir, Blanc, False = joueur, sinon AI()
-
 Players = [False, AI(True, 0)]
+playerPlayTime = [0, 0]
 
 EasyAI = AI(True, 0, 1)
 MediumAI = AI(True, 0, 4)
 HardAI = AI(True, 0, 6)
 
-WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+WIN = pygame.display.set_mode(WINDOWSIZE)
 
-pygame.display.set_caption("Le Othello aka L'Reversi")
+pygame.display.set_caption("ReversIA")
 
 
 def main():
@@ -42,8 +74,8 @@ def main():
         clock.tick(FPS)
         mouse = pygame.mouse.get_pos()
         # Draw menu
-        WIN.fill(GREY)
-        write_text(WIN, WIDTH/2, HEIGHT/8, "OTHELLO", main_font, 80, BLACK)
+        WIN.fill(WHITEPAWN)
+        write_text(WIN, WIDTH / 2, HEIGHT / 8, "ReversIA", main_font, 80, BLACKPAWN)
 
         menu_id = render_menu(menu_id, WIN, mouse)  # Compute le menu courant
 
@@ -118,21 +150,17 @@ def main():
                     board.currentPlayer = not board.currentPlayer
 
                     winner = board.winner()
-                    if winner == 0:
-                        winner = "noirs"
-                    elif winner == 1:
-                        winner = "blancs"
 
-                    if winner != 2:
-                        print("Partie Terminée, les " + winner + " gagnent")
-                    else:
-                        print("Partie Terminée, égalité")
-                    gameIsrunning = False
+                    while True:
+                        mouse = pygame.mouse.get_pos()
+                        drawEndBar(WIN, mouse, winner)
+                        pygame.display.update()
+
             else:
-                # print("coups possibles pour les " + ("blancs" if board.currentPlayer else "noirs") + " : " + str(board.getPossiblePlay(board.currentPlayer)))
-                print("----------------------------------- Tour des " + (
-                    "blancs" if board.currentPlayer else "noirs") + " -------------------------------------------")
-                None
+                display.drawBar(WIN, board.currentPlayer, playerPlayTime)
+                display.updateNbExplo(WIN, Nb_exploration[0])
+
+                playTime = time.time()
 
             board.draw(WIN)
             pygame.display.update()
@@ -141,8 +169,7 @@ def main():
 
         if Players[int(board.currentPlayer)] != False:
             check_canPlay = False
-
-            actualPlayer = Players[int(board.currentPlayer)]
+            Nb_exploration[0] = 0
 
             result = alpha_beta_minimax(Node(board), Players[int(board.currentPlayer)].depth, float("-inf"),
                                         float("inf"), True, board.currentPlayer,
@@ -150,25 +177,28 @@ def main():
             if result[1] is not None:
                 board.applyMove(result[1], board.currentPlayer)
                 print(
-                    "Nb explorations: " + str(Nb_exploration[0]) + " Score: " + str(result[0]) + " Coup: " + str(result[1]))
-                Nb_exploration[0] = 0
+                    "Nb explorations: " + str(Nb_exploration[0]) + " Score: " + str(result[0]) + " Coup: " + str(
+                        result[1]))
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
+                playerPlayTime[int(not board.currentPlayer)] = playerPlayTime[
+                                                                   int(not board.currentPlayer)] + time.time() - playTime
+        else:
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
 
-                check_canPlay = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
 
-                if Players[int(board.currentPlayer)] == False:
-                    mouse_pos = pygame.mouse.get_pos()
-                    board.mouse_place_piece(mouse_pos)
+                    if Players[int(board.currentPlayer)] == False:
+                        mouse_pos = pygame.mouse.get_pos()
+                        if board.mouse_place_piece(mouse_pos):
+                            check_canPlay = False
+                            playerPlayTime[int(not board.currentPlayer)] = playerPlayTime[
+                                                                               int(not board.currentPlayer)] + time.time() - playTime
 
             board.draw(WIN)
             pygame.display.update()
-
-    # pygame.quit()
 
 
 main()

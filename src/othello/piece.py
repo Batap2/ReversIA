@@ -1,6 +1,9 @@
-from .board_variable import SQUARE_SIZE, WHITE, BLACK, SIZE
+from .board_variable import *
 import pygame
 
+import sys
+sys.path.append('../main_variable.py')
+from src.main_variable import BOARD_Y_OFFSET
 
 class Piece:
     PADDING = 10
@@ -20,7 +23,7 @@ class Piece:
         radius = SQUARE_SIZE // 2 - self.PADDING
         x = SQUARE_SIZE * (self.pos % SIZE) + SQUARE_SIZE // 2
         y = SQUARE_SIZE * (self.pos // SIZE) + SQUARE_SIZE // 2
-        pygame.draw.circle(win, WHITE if self.color else BLACK, (x, y), radius)
+        pygame.draw.circle(win, WHITEPAWN if self.color else BLACKPAWN, (x, y + BOARD_Y_OFFSET), radius)
 
     def __repr__(self):
         return str(self.color)

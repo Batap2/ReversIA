@@ -6,7 +6,8 @@ SIZE = 8  # Taille du damier SIZE x SIZE
 SQUARE_SIZE = WIDTH//SIZE  # Taille d'un coté d'une case
 
 # Couleurs
-COLOR = (35, 180, 35)
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
 GREY = (200, 200, 200)
+
+BOARDGREEN = pygame.Color("#5B8C5A")
+WHITEPAWN = pygame.Color("#FFEEDB")
+BLACKPAWN = pygame.Color("#242328")

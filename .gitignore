@@ -1,3 +1,4 @@
 
 .idea/Croatello.iml
 *.xml
+*.pyc
