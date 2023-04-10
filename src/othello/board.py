@@ -39,10 +39,10 @@ class Board:
         for square in range(SIZE * SIZE):
             self.board.append(0)
         center = SIZE // 2
-        self.setPiece(True, center, center)
-        self.setPiece(False, center - 1, center)
-        self.setPiece(False, center, center - 1)
-        self.setPiece(True, center - 1, center - 1)
+        self.setPiece(False, center, center)
+        self.setPiece(True, center - 1, center)
+        self.setPiece(True, center, center - 1)
+        self.setPiece(False, center - 1, center - 1)
 
     # Fonction qui pose un pion et applique les conséquences. Retourn True si le move a pu être appliqué, puis change le joueur
     def applyMove(self, pos, player: bool) -> bool:
