@@ -145,16 +145,19 @@ class Board:
                     neighbours.append(i + SIZE * j)
         return neighbours
 
-    # Retourne les coup jouable pour player
-    # TODO : A remplacer si ya des problèmes de perf, au début c'est bien mais vers le milieu du jeu c'est plus opti
-    # TODO : Ouais faut faire une condition si il y a X pion présent parce que c'est infernal
     def getPossiblePlay(self, player: bool) -> [int]:
-        plays = set([])
-        for piece in self.board:
-            if piece != 0:
-                plays.update(self.getValidNeighbourPos(piece.pos, player))
+        def getPossiblePlay(self, player: bool) -> [int]:
+            plays = set([])
+            if self.piecesNumber > 8:
+                for place in range(len(self.board)):
+                    if self.board[place] == 0 and self.isValid(place % SIZE, place // SIZE, player):
+                        plays.add(place)
+            else:
+                for piece in self.board:
+                    if piece != 0:
+                        plays.update(self.getValidNeighbourPos(piece.pos, player))
 
-        return plays
+            return plays
 
     def canPlay(self, color: bool) -> bool:
         if self.getPossiblePlay(color):

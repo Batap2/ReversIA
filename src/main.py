@@ -174,6 +174,9 @@ def main():
             result = alpha_beta_minimax(Node(board), Players[int(board.currentPlayer)].depth, float("-inf"),
                                         float("inf"), True, board.currentPlayer,
                                         Players[int(board.currentPlayer)].heuristic)
+
+            # result = negaMax(Node(board), Players[int(board.currentPlayer)].depth, float("-inf"), float("inf"), True, board.currentPlayer, Players[int(board.currentPlayer)].heuristic)
+
             if result[1] is not None:
                 board.applyMove(result[1], board.currentPlayer)
                 print(
