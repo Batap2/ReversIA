@@ -78,7 +78,7 @@ class Node:
             indexMinWeightValue = 5
 
         coinParityHeuristicValue = 100 * (res[indexMaxPawn] - res[indexMinPawn]) / (
-                res[indexMaxPawn] + res[indexMinPawn])
+                    res[indexMaxPawn] + res[indexMinPawn])
 
         maxPlayerMoves = len(self.board.getPossiblePlay(color))
         minPlayerMoves = len(self.board.getPossiblePlay(not color))
@@ -90,7 +90,7 @@ class Node:
 
         if res[indexMaxCorner] + res[indexMinCorner] != 0:
             cornerHeuristicValue = 100 * (res[indexMaxCorner] - res[indexMinCorner]) / (
-                    res[indexMaxCorner] + res[indexMinCorner])
+                        res[indexMaxCorner] + res[indexMinCorner])
         else:
             cornerHeuristicValue = 0
 
@@ -116,7 +116,7 @@ class Node:
             indexMinWeightValue = 5
 
         coinParityHeuristicValue = 100 * (res[indexMaxPawn] - res[indexMinPawn]) / (
-                res[indexMaxPawn] + res[indexMinPawn])
+                    res[indexMaxPawn] + res[indexMinPawn])
 
         maxPlayerMoves = len(self.board.getPossiblePlay(color))
         minPlayerMoves = len(self.board.getPossiblePlay(not color))
@@ -128,16 +128,15 @@ class Node:
 
         if res[indexMaxCorner] + res[indexMinCorner] != 0:
             cornerHeuristicValue = 100 * (res[indexMaxCorner] - res[indexMinCorner]) / (
-                    res[indexMaxCorner] + res[indexMinCorner])
+                        res[indexMaxCorner] + res[indexMinCorner])
         else:
             cornerHeuristicValue = 0
 
         if res[indexMaxWeightValue] + res[indexMinWeightValue] != 0:
-            weightParity = 100 * (res[indexMaxWeightValue] - res[indexMinWeightValue]) / (
-                        res[indexMaxWeightValue] + res[indexMinWeightValue])
+            weightParity = 100 * (res[indexMaxWeightValue] - res[indexMinWeightValue]) / (res[indexMaxWeightValue] + res[indexMinWeightValue])
         else:
             weightParity = 0
-        # weightParity = res[indexMaxWeightValue] - res[indexMinWeightValue]
+        #weightParity = res[indexMaxWeightValue] - res[indexMinWeightValue]
 
         return coinParityHeuristicValue + mobilityHeuristicValue + cornerHeuristicValue + weightParity
 
@@ -151,6 +150,7 @@ def minimax(node, depth, current_player: bool, maximizingPlayer: bool) -> (int, 
     Nb_exploration[0] = Nb_exploration[0] + 1
 
     if depth == 0 or node.isLeaf():
+        if HEURISTIC_MODE == 0:
             return node.computeHeuristic_cout(maximizingPlayer), None
 
     returnMove = None
@@ -250,55 +250,5 @@ def alpha_beta_minimax(node,
             if alpha >= value:
                 break
             beta = min(beta, value)
-
-    return value, returnMove
-
-# le negaMax est bizarre, le resultat n'est pas le même qu'avec minimax
-def negaMax(node,
-            depth,
-            alpha,
-            beta,
-            current_player: bool,
-            maximizingPlayer: bool,
-            heuristic: int,
-            maxPlayerMoves: int = 0,
-            minPlayerMoves: int = 0) -> (int, int):
-    # Pour faire des mesures
-    Nb_exploration[0] = Nb_exploration[0] + 1
-
-    if depth == 0 or node.isLeaf():
-        if heuristic == 0:
-            return node.computeHeuristic_cout(maximizingPlayer), None
-        elif heuristic == 1:
-            return node.computeHeuristic2(maximizingPlayer), None
-        elif heuristic == 2:
-            return node.computeHeuristic3(maximizingPlayer), None
-
-    returnMove = None
-
-    value = float('-inf')
-
-    availableMoves = node.board.getPossiblePlay(maximizingPlayer)
-
-    for move in availableMoves:
-        newBoard = copy.deepcopy(node.board)
-        newBoard.applyMove(move, current_player)
-
-        result = negaMax(Node(newBoard), depth - 1, -beta, -alpha, not current_player, maximizingPlayer, heuristic)
-
-        # pour pas que ça renvoie un move null
-        if returnMove == None:
-            returnMove = move
-
-        # value = max(value, -negamax)
-        if -result[0] > value:
-            value = -result[0]
-            returnMove = move
-
-        if -result[0] >= alpha:
-            alpha = -result[0]
-            returnMove = move
-            if alpha >= beta:
-                break
 
     return value, returnMove

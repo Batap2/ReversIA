@@ -1,10 +1,16 @@
 import time
+
+import pygame.mixer
 from othello.board import Board
 from othello_minimax import *
-from src.menu import *
+from menu import *
 from main_variable import *
 import display
 
+pygame.mixer.init()
+pygame.mixer.music.load("../media/trutPasTroudz.mp3")
+pygame.mixer.music.set_volume(0.5)
+pygame.mixer.music.play()
 
 class AI:
     def __init__(self, color: bool, heuristic: int = 0, depth: int = 4):
@@ -50,9 +56,9 @@ FPS = 60
 Players = [False, AI(True, 0)]
 playerPlayTime = [0, 0]
 
-EasyAI = AI(True, 0, 1)
-MediumAI = AI(True, 0, 4)
-HardAI = AI(True, 0, 6)
+EasyAI = AI(True, 1, 2)
+MediumAI = AI(True, 1, 4)
+HardAI = AI(True, 1, 6)
 
 WIN = pygame.display.set_mode(WINDOWSIZE)
 
@@ -174,9 +180,6 @@ def main():
             result = alpha_beta_minimax(Node(board), Players[int(board.currentPlayer)].depth, float("-inf"),
                                         float("inf"), True, board.currentPlayer,
                                         Players[int(board.currentPlayer)].heuristic)
-
-            # result = negaMax(Node(board), Players[int(board.currentPlayer)].depth, float("-inf"), float("inf"), True, board.currentPlayer, Players[int(board.currentPlayer)].heuristic)
-
             if result[1] is not None:
                 board.applyMove(result[1], board.currentPlayer)
                 print(

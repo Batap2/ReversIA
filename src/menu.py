@@ -1,6 +1,6 @@
 import pygame
-from .button import *
-from src.othello.board_variable import WIDTH, HEIGHT
+from button import *
+from othello.board_variable import WIDTH, HEIGHT
 from main_variable import *
 from othello.board_variable import *
 

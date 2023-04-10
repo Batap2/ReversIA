@@ -3,7 +3,7 @@ import pygame
 
 import sys
 sys.path.append('../main_variable.py')
-from src.main_variable import BOARD_Y_OFFSET
+from main_variable import BOARD_Y_OFFSET
 
 class Piece:
     PADDING = 10
