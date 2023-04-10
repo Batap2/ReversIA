@@ -7,11 +7,6 @@ from menu import *
 from main_variable import *
 import display
 
-pygame.mixer.init()
-pygame.mixer.music.load("../media/1.ogg")
-pygame.mixer.music.set_volume(0.3)
-pygame.mixer.music.play(-1)
-
 class AI:
     def __init__(self, color: bool, heuristic: int = 0, depth: int = 4):
         self.color = color
@@ -66,6 +61,11 @@ pygame.display.set_caption("ReversIA")
 
 
 def main():
+    pygame.mixer.init()
+    pygame.mixer.music.load("../media/1.ogg")
+    pygame.mixer.music.set_volume(0.3)
+    pygame.mixer.music.play(-1)
+
     global Nb_exploration
     run = True
     clock = pygame.time.Clock()

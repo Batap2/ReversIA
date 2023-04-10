@@ -58,7 +58,7 @@ def render_main_menu(WIN, mouse):
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            id = 0
+            pygame.quit()
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # Play
