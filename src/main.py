@@ -8,9 +8,9 @@ from main_variable import *
 import display
 
 pygame.mixer.init()
-pygame.mixer.music.load("../media/trutPasTroudz.mp3")
-pygame.mixer.music.set_volume(0.5)
-pygame.mixer.music.play()
+pygame.mixer.music.load("../media/1.ogg")
+pygame.mixer.music.set_volume(0.3)
+pygame.mixer.music.play(-1)
 
 class AI:
     def __init__(self, color: bool, heuristic: int = 0, depth: int = 4):
@@ -138,6 +138,11 @@ def main():
             Players = [FirstAI, SecondAI]
             menu_id = 0
         pygame.display.update()
+
+    pygame.mixer.init()
+    pygame.mixer.music.load("../media/2.ogg")
+    pygame.mixer.music.set_volume(0.3)
+    pygame.mixer.music.play(-1)
 
     # Game loop
     gameIsrunning = True
