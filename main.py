@@ -6,6 +6,7 @@ from src.othello_minimax import *
 from src.menu import *
 from src.main_variable import *
 import src.display
+import webbrowser
 
 class AI:
     def __init__(self, color: bool, heuristic: int = 0, depth: int = 4):
@@ -138,6 +139,9 @@ def main():
             SecondAI = HardAI
             Players = [FirstAI, SecondAI]
             menu_id = 0
+        if (menu_id == 101):
+            menu_id = 1
+            webbrowser.open("https://docs.google.com/forms/d/e/1FAIpQLSegbIqs5qvkSo3CKFLBmIkFkPFaAhI0nLEskL5YS69DV9E-zA/viewform?usp=sf_link")
         pygame.display.update()
 
     pygame.mixer.init()

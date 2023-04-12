@@ -2,4 +2,4 @@
 .idea/Croatello.iml
 *.xml
 *.pyc
-src/othello/__pycache__/piece.cpython-311.pyc
+src/othello/__pycache__
