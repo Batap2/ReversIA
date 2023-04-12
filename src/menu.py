@@ -43,6 +43,9 @@ def render_menu(menu_id, WIN, mouse):
 
     if (menu_id == 100):
         id = render_credit_menu(WIN, mouse)
+
+    if (menu_id == 34):
+    	id = render_rules_menu(WIN, mouse)
     return id
 
 
@@ -83,47 +86,52 @@ def render_main_menu(WIN, mouse):
 
 
 def render_versus_menu(WIN, mouse):
-    id = 2
-    # Création des instances de Button pour les boutons PLAY et QUIT
-    JvJ_button = SizableButton(WIDTH / 2, HEIGHT / 3, "Player vs Player", main_font, button_size, WHITEPAWN, BLACKPAWN, 400, 70)
+	id = 2
+	# Création des instances de Button pour les boutons PLAY et QUIT
+	JvJ_button = SizableButton(WIDTH / 2, HEIGHT / 3, "Player vs Player", main_font, button_size, WHITEPAWN, BLACKPAWN, 400, 70)
 
-    JvAI_button = SizableButton(WIDTH / 2, HEIGHT / 3 + HEIGHT / 10, "Player vs AI", main_font, button_size, WHITEPAWN, BLACKPAWN, 400, 70)
+	JvAI_button = SizableButton(WIDTH / 2, HEIGHT / 3 + HEIGHT / 10, "Player vs AI", main_font, button_size, WHITEPAWN, BLACKPAWN, 400, 70)
 
-    AIvAI_button = SizableButton(WIDTH / 2, HEIGHT / 3 + 2 * HEIGHT / 10, "AI vs AI",
-                          main_font, button_size, WHITEPAWN, BLACKPAWN, 400, 70)
+	AIvAI_button = SizableButton(WIDTH / 2, HEIGHT / 3 + 2 * HEIGHT / 10, "AI vs AI",
+	                      main_font, button_size, WHITEPAWN, BLACKPAWN, 400, 70)
 
-    return_button = SizableButton(WIDTH / 2, HEIGHT / 3 + 6 * HEIGHT / 10, "BACK TO MAIN",
-                           main_font, button_size, WHITEPAWN, BLACKPAWN, 400, 70)
+	rules_button = SizableButton(WIDTH / 2, HEIGHT / 3 + 4 * HEIGHT / 10, "RULES", main_font, button_size, WHITEPAWN, BLACKPAWN, 400, 70)
 
-    quit_button = SizableButton(WIDTH / 2, HEIGHT / 3 + 7 * HEIGHT / 10, "QUIT",
-                         main_font, button_size, WHITEPAWN, BLACKPAWN, 400, 70)
+	return_button = SizableButton(WIDTH / 2, HEIGHT / 3 + 6 * HEIGHT / 10, "BACK TO MAIN",
+	                       main_font, button_size, WHITEPAWN, BLACKPAWN, 400, 70)
 
-    JvJ_button.draw(WIN, mouse)
-    JvAI_button.draw(WIN, mouse)
-    AIvAI_button.draw(WIN, mouse)
-    return_button.draw(WIN, mouse)
-    quit_button.draw(WIN, mouse)
+	quit_button = SizableButton(WIDTH / 2, HEIGHT / 3 + 7 * HEIGHT / 10, "QUIT",
+	                     main_font, button_size, WHITEPAWN, BLACKPAWN, 400, 70)
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            id = 0
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            # PVP
-            if JvJ_button.is_hovered:
-                id = 3
-            # PVAI
-            if JvAI_button.is_hovered:
-                id = 4
-            # AIVAI
-            if AIvAI_button.is_hovered:
-                id = 5
-            # BACK
-            if return_button.is_hovered:
-                id = 1
-            # Quit
-            if quit_button.is_hovered:
-                id = 0
-    return id
+	JvJ_button.draw(WIN, mouse)
+	JvAI_button.draw(WIN, mouse)
+	AIvAI_button.draw(WIN, mouse)
+	rules_button.draw(WIN, mouse)
+	return_button.draw(WIN, mouse)
+	quit_button.draw(WIN, mouse)
+
+	for event in pygame.event.get():
+		if event.type == pygame.QUIT:
+		    id = 0
+		if event.type == pygame.MOUSEBUTTONDOWN:
+			# PVP
+			if JvJ_button.is_hovered:
+			    id = 3
+			# PVAI
+			if JvAI_button.is_hovered:
+			    id = 4
+			# AIVAI
+			if AIvAI_button.is_hovered:
+			    id = 5
+			if rules_button.is_hovered:
+				id = 34
+			# BACK
+			if return_button.is_hovered:
+			    id = 1
+			# Quit
+			if quit_button.is_hovered:
+			    id = 0
+	return id
 
 
 def render_PvAI_menu(WIN, mouse):
@@ -391,3 +399,48 @@ def render_credit_menu(WIN, mouse):
                 if quit_button.is_hovered:
                     id = 0
     return id
+
+
+def render_rules_menu(WIN, mouse):
+	id = 34
+
+	write_text(WIN, 400, 200, "The object of the game is to have the majority of discs facing up on the board", None, 25, BLACKPAWN)
+	write_text(WIN, 400, 225, "showing one's own colour at the end of the game.", None, 25, BLACKPAWN)
+	write_text(WIN, 400, 250, """A move consists of "outflanking" your opponent's disc(s),""", None, 25, BLACKPAWN)
+	write_text(WIN, 400, 275, """then flipping the outflanked disc(s)to your colour.""", None, 25, BLACKPAWN)
+	write_text(WIN, 400, 300, """To outflank means to place a disc on the board so that your opponent's row (or rows) of disc(s)""", None, 25, BLACKPAWN)
+	write_text(WIN, 400, 325, """is bordered at each end by a disc of your colour. (A "row" may be made up of one or more discs).""", None, 25, BLACKPAWN)
+	
+	write_text(WIN, 400, 360, "DETAILED RULES", None, 40, BLACKPAWN)
+
+	write_text(WIN, 400, 400, "1. Black always moves first.", None, 22, BLACKPAWN)
+	
+	write_text(WIN, 400, 425, "2. If on your turn you cannot outflank and flip at least one opposing disc, ", None, 22, BLACKPAWN)
+	write_text(WIN, 400, 450, "your turn is forfeited and your opponent moves again.", None, 22, BLACKPAWN)
+	write_text(WIN, 400, 475, "However, if a move is available to you, you may not forfeit your turn. ", None, 22, BLACKPAWN)
+	
+	write_text(WIN, 400, 500, "3. Players may not skip over their own colour disc(s) to outflank an opposing disc.", None, 22, BLACKPAWN)
+	
+	write_text(WIN, 400, 525, "4. Disc(s) may only be outflanked as a direct result of a move", None, 22, BLACKPAWN)
+	write_text(WIN, 400, 550, "and must fall in the direct line of the disc placed down.", None, 22, BLACKPAWN)
+
+	write_text(WIN, 400, 575, "5. All discs outflanked in any one move must be flipped,", None, 22, BLACKPAWN)
+	write_text(WIN, 400, 600, "even if it is to the player's advantage not to flip them at all.", None, 22, BLACKPAWN)
+
+	write_text(WIN, 400, 625, "6. When it is no longer possible for either player to move, the game is over.", None, 22, BLACKPAWN)
+	write_text(WIN, 400, 650, "Discs are counted and the player with the majority of their colour showing is the winner.", None, 22, BLACKPAWN)
+
+
+	# Création des instances de Button pour les boutons PLAY et QUIT
+	back_button = SizableButton(WIDTH / 2, HEIGHT / 3 + 6 * HEIGHT / 10, "BACK",
+	            main_font, button_size, WHITEPAWN, BLACKPAWN, 400, 70)
+
+	back_button.draw(WIN, mouse)
+
+	for event in pygame.event.get():
+		if event.type == pygame.QUIT:
+			pygame.quit()
+		if event.type == pygame.MOUSEBUTTONDOWN:
+			if back_button.is_hovered:
+				id = 1
+	return id
