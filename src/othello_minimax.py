@@ -1,5 +1,5 @@
 import copy
-from othello.board_variable import *
+from .othello.board_variable import *
 
 Nb_exploration = [0]
 
@@ -150,7 +150,6 @@ def minimax(node, depth, current_player: bool, maximizingPlayer: bool) -> (int, 
     Nb_exploration[0] = Nb_exploration[0] + 1
 
     if depth == 0 or node.isLeaf():
-        if HEURISTIC_MODE == 0:
             return node.computeHeuristic_cout(maximizingPlayer), None
 
     returnMove = None

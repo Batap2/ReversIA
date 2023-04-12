@@ -1,7 +1,7 @@
 import pygame
-from main_variable import *
-from othello.board_variable import *
-from button import *
+from .main_variable import *
+from .othello.board_variable import *
+from .button import *
 
 
 def drawBar(win, colorTurn, playerTime):

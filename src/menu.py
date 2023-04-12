@@ -1,8 +1,8 @@
 import pygame
-from button import *
-from othello.board_variable import WIDTH, HEIGHT
-from main_variable import *
-from othello.board_variable import *
+from .button import *
+from .othello.board_variable import WIDTH, HEIGHT
+from .main_variable import *
+from .othello.board_variable import *
 
 main_font = ""  # Font utilisé sur tout le texte
 button_size = HEIGHT // 15  # Size de la police d'écriture
@@ -40,6 +40,9 @@ def render_menu(menu_id, WIN, mouse):
 
     if (menu_id == 14 or menu_id == 15 or menu_id == 16):
         id = render_SecondAIdifficulty_menu(menu_id, WIN, mouse)
+
+    if (menu_id == 100):
+        id = render_credit_menu(WIN, mouse)
     return id
 
 
@@ -50,10 +53,14 @@ def render_main_menu(WIN, mouse):
     play_button = SizableButton(WIDTH / 2, HEIGHT / 3 + 3 * HEIGHT / 10, "PLAY",
                          main_font, button_size, WHITEPAWN, BLACKPAWN, 400, 70)
 
-    quit_button = SizableButton(WIDTH / 2, HEIGHT / 3 + 4 * HEIGHT / 10, "QUIT",
+    credit_button = SizableButton(WIDTH / 2, HEIGHT / 3 + 4 * HEIGHT / 10, "CREDIT",
+                                main_font, button_size, WHITEPAWN, BLACKPAWN, 400, 70)
+
+    quit_button = SizableButton(WIDTH / 2, HEIGHT / 3 + 5 * HEIGHT / 10, "QUIT",
                          main_font, button_size, WHITEPAWN, BLACKPAWN, 400, 70)
 
     play_button.draw(WIN, mouse)
+    credit_button.draw(WIN, mouse)
     quit_button.draw(WIN, mouse)
 
     for event in pygame.event.get():
@@ -64,6 +71,8 @@ def render_main_menu(WIN, mouse):
                 # Play
                 if play_button.is_hovered:
                     id = 2
+                if credit_button.is_hovered:
+                    id = 100
                 # Quit
                 if quit_button.is_hovered:
                     id = 0
@@ -347,4 +356,38 @@ def render_SecondAIdifficulty_menu(id_menu, WIN, mouse):
             # Quit
             if quit_button.is_hovered:
                 id = 0
+    return id
+
+def render_credit_menu(WIN, mouse):
+    id = 100
+
+    write_text(WIN, 400, 200, "ReversIA is a game of Othello / Reversi,", None, 30, BLACKPAWN)
+    write_text(WIN, 400, 225, "incorporating an AI using the Minimax algorithm", None, 30, BLACKPAWN)
+    write_text(WIN, 400, 250, "with alpha-beta pruning", None, 30, BLACKPAWN)
+    write_text(WIN, 400, 275, "It was created as part of a student project.", None, 30, BLACKPAWN)
+
+    write_text(WIN, 400, 425, "Game Logic : Guillaume Bataille, Nicolas Luciani, Baptiste Verniol", None, 30, BLACKPAWN)
+    write_text(WIN, 400, 450, "IA : Baptiste Verniol", None, 30, BLACKPAWN)
+    write_text(WIN, 400, 475, "Music : Sebastien Sluck", None, 30, BLACKPAWN)
+
+    # Création des instances de Button pour les boutons PLAY et QUIT
+    back_button = SizableButton(WIDTH / 2, HEIGHT / 3 + 4 * HEIGHT / 10, "BACK TO MAIN MENU",
+                                main_font, button_size, WHITEPAWN, BLACKPAWN, 400, 70)
+
+    quit_button = SizableButton(WIDTH / 2, HEIGHT / 3 + 5 * HEIGHT / 10, "QUIT",
+                         main_font, button_size, WHITEPAWN, BLACKPAWN, 400, 70)
+
+    back_button.draw(WIN, mouse)
+    quit_button.draw(WIN, mouse)
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if back_button.is_hovered:
+                    id = 1
+                # Quit
+                if quit_button.is_hovered:
+                    id = 0
     return id

@@ -3,7 +3,7 @@ from .piece import Piece
 
 import sys
 sys.path.append('../main_variable.py')
-from main_variable import BOARD_Y_OFFSET, BARCOLOR2
+from ..main_variable import BOARD_Y_OFFSET, BARCOLOR2
 
 
 
