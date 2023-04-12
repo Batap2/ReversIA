@@ -56,11 +56,15 @@ def render_main_menu(WIN, mouse):
     credit_button = SizableButton(WIDTH / 2, HEIGHT / 3 + 4 * HEIGHT / 10, "CREDIT",
                                 main_font, button_size, WHITEPAWN, BLACKPAWN, 400, 70)
 
-    quit_button = SizableButton(WIDTH / 2, HEIGHT / 3 + 5 * HEIGHT / 10, "QUIT",
+    feedback_button = SizableButton(WIDTH / 2, HEIGHT / 3 + 5 * HEIGHT / 10, "GIVE FEEDBACK",
+                                main_font, button_size, WHITEPAWN, BLACKPAWN, 400, 70)
+
+    quit_button = SizableButton(WIDTH / 2, HEIGHT / 3 + 6 * HEIGHT / 10, "QUIT",
                          main_font, button_size, WHITEPAWN, BLACKPAWN, 400, 70)
 
     play_button.draw(WIN, mouse)
     credit_button.draw(WIN, mouse)
+    feedback_button.draw(WIN, mouse)
     quit_button.draw(WIN, mouse)
 
     for event in pygame.event.get():
@@ -73,6 +77,8 @@ def render_main_menu(WIN, mouse):
                     id = 2
                 if credit_button.is_hovered:
                     id = 100
+                if feedback_button.is_hovered:
+                    id = 101
                 # Quit
                 if quit_button.is_hovered:
                     id = 0
