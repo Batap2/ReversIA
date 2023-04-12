@@ -52,9 +52,9 @@ FPS = 60
 Players = [False, AI(True, 0)]
 playerPlayTime = [0, 0]
 
-EasyAI = AI(True, 1, 2)
-MediumAI = AI(True, 1, 4)
-HardAI = AI(True, 1, 6)
+EasyAI = AI(True, 0, 2)
+MediumAI = AI(True, 2, 3)
+HardAI = AI(True, 1, 4)
 
 WIN = pygame.display.set_mode(WINDOWSIZE)
 
